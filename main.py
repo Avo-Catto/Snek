@@ -9,7 +9,10 @@ FIELD_SIZE = (30, 30)
 SCREEN_SIZE = (600, 600)
 FPS = 1
 
-TEXTURES = {0: (0, 255, 0), 1: (100, 100, 100), 2: (255, 0, 0), 3: (255, 255, 0)}
+ASSETS = {
+    0: pygame.image.load("assets/grass.png"), 
+    3: pygame.image.load("assets/ns_part.png"),
+}
 
 
 class Direction(Enum):
@@ -53,8 +56,8 @@ class Block:
         self.__y = new
 
     def draw(self, surface: Surface) -> None:
-        texture = TEXTURES[self.id]
-        pygame.draw.rect(surface, texture, pygame.Rect(self.position, FIELD_SIZE))
+        asset = ASSETS[self.id]
+        surface.blit(asset, self.position)
 
 
 class Part(Block):
@@ -147,8 +150,8 @@ class Map:
     def draw(self, surface: Surface) -> None:
         for row in self.__map:
             for block in row:
-                texture = TEXTURES[block.id]
-                pygame.draw.rect(surface, texture, Rect(block.position, FIELD_SIZE))
+                asset = ASSETS[block.id]
+                surface.blit(asset, block.position)
 
 
 if __name__ == "__main__":
@@ -159,7 +162,7 @@ if __name__ == "__main__":
     # initialize game components
     world_map = Map()
     world_map.load_map("maps/level0.txt")
-    snake = Snake((30, 400), (Direction.Up, Direction.Down))
+    snake = Snake((30, 300), (Direction.Up, Direction.Down))
 
     # setup screen
     screen = pygame.display.set_mode(SCREEN_SIZE)
