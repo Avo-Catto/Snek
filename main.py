@@ -14,6 +14,12 @@ FPS = 60
 
 START_BUTTON = "assets/play_button.png"
 GAME_OVER = "assets/game_over.png"
+MAPS = (
+    "maps/Level 1.txt",
+    "maps/Level 2.txt",
+    "maps/Level 3.txt",
+)
+LEVEL_UP_SEC = 3
 
 ASSETS = {
     0: pygame.image.load("assets/grass.png"),
@@ -26,8 +32,15 @@ ASSETS = {
     7: pygame.image.load("assets/tail.png"),
 }
 
-MAPS = ("maps/Level 1.txt", "maps/Level 2.txt")
-LEVEL_UP_SEC = 3
+# Initialialyze music & sounds
+pygame.mixer.init()
+pygame.mixer.music.load("sounds/8bit.mp3")
+
+SOUNDS = {
+    "eat": pygame.mixer.Sound("sounds/eat.mp3"),
+    "game_over": pygame.mixer.Sound("sounds/game_over.mp3"),
+    "level_up": pygame.mixer.Sound("sounds/level_up.mp3"),
+}
 
 
 class Direction(Enum):
@@ -119,6 +132,7 @@ class Apple(Block):
     def eat(self) -> None:
         """Hide apple."""
         self.coordinates = (-FIELD_SIZE[0], -FIELD_SIZE[1])
+        pygame.mixer.Sound.play(SOUNDS["eat"])
 
     def spawn(self, obstacles: list[Callable[[tuple[int, int]], bool]]) -> None:
         """Spawn an apple at a random empty space on the map."""
@@ -514,8 +528,10 @@ if __name__ == "__main__":
             if not level_up_screen(screen, clock, level):
                 exit()
 
+        # post-setup
         counter = 0
         level_up = False
+        pygame.mixer.music.play(-1)
 
         # game loop
         running = True
@@ -530,16 +546,12 @@ if __name__ == "__main__":
                 # controls
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_UP:
-                        print("up")
                         snake.set_direction(Direction.Up)
                     if event.key == pygame.K_DOWN:
-                        print("down")
                         snake.set_direction(Direction.Down)
                     if event.key == pygame.K_LEFT:
-                        print("left")
                         snake.set_direction(Direction.Left)
                     if event.key == pygame.K_RIGHT:
-                        print("right")
                         snake.set_direction(Direction.Right)
 
             if counter >= FPS - world_map.speed:
@@ -555,13 +567,13 @@ if __name__ == "__main__":
 
                     # check if level up
                     if snake.score == world_map.next_after:
+                        pygame.mixer.Sound.play(SOUNDS["level_up"])
                         running = False
                         level_up = True
                         level += 1
 
                 # update
                 snake.update(move)
-                print(f"Score: {snake.score}")
 
                 # collision
                 x, y = snake.position
@@ -571,7 +583,7 @@ if __name__ == "__main__":
                         world_map.is_collision(snake.coordinates),
                     ]
                 ):
-                    print("Game Over!")
+                    pygame.mixer.Sound.play(SOUNDS["game_over"])
                     running = False
 
                 # draw stuff
@@ -585,6 +597,7 @@ if __name__ == "__main__":
             # tick clock
             clock.tick(FPS)
 
+        pygame.mixer.music.pause()
         if not level_up:
             retry = game_over_screen(screen, clock)
             level = 0
@@ -593,4 +606,3 @@ if __name__ == "__main__":
 
 
 # TODO: cherries -_-
-# TODO: sound for collect, level up & game over

@@ -9,5 +9,8 @@ devenv.local.yaml
 # pre-commit
 .pre-commit-config.yaml
 
+# pycache
+.venv
+
 # Test
 test.py

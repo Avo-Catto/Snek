@@ -20,6 +20,6 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 > speed 20
 > cherries 1
-> next 1
+> next 5
 > snake_pos 10 10
-> snake_dir r
+> snake_dir u
