@@ -12,6 +12,8 @@ BOARD_SIZE = (20, 20)
 SCREEN_SIZE = (FIELD_SIZE[0] * BOARD_SIZE[0], FIELD_SIZE[1] * BOARD_SIZE[1])
 FPS = 60
 
+START_BUTTON = "assets/play_button.png"
+GAME_OVER = "assets/game_over.png"
 
 ASSETS = {
     0: pygame.image.load("assets/grass.png"),
@@ -24,12 +26,31 @@ ASSETS = {
     7: pygame.image.load("assets/tail.png"),
 }
 
+MAPS = ("maps/Level 1.txt", "maps/Level 2.txt")
+LEVEL_UP_SEC = 3
+
 
 class Direction(Enum):
     Up = 1
     Down = 2
     Left = 4
     Right = 7
+
+
+def direction_from_str(dir: str) -> Direction:
+    """u = up; d = down; l = left; r = right"""
+    match dir:
+        case "u":
+            return Direction.Up
+        case "d":
+            return Direction.Down
+        case "l":
+            return Direction.Left
+        case "r":
+            return Direction.Right
+        case _:
+            print(f"Error: Parsing Direction: {dir}")
+            exit(1)
 
 
 def counter_direction(dir: Direction) -> Direction:
@@ -45,9 +66,9 @@ def counter_direction(dir: Direction) -> Direction:
 
 
 class Block:
-    def __init__(self, id: int, pos: tuple[int, int]) -> None:
+    def __init__(self, id: int, coord: tuple[int, int]) -> None:
         self.__id = id
-        self.__pos = pos
+        self.__coord = coord
 
     @property
     def id(self) -> int:
@@ -55,32 +76,32 @@ class Block:
 
     @property
     def position(self) -> tuple[int, int]:
-        x, y = self.__pos
+        x, y = self.__coord
         return (x * FIELD_SIZE[0], y * FIELD_SIZE[1])
 
     @property
     def coordinates(self) -> tuple[int, int]:
-        return self.__pos
+        return self.__coord
 
     @coordinates.setter
     def coordinates(self, new: tuple[int, int]) -> None:
-        self.__pos = new
+        self.__coord = new
 
     @property
     def x(self) -> int:
-        return self.__pos[0]
+        return self.__coord[0]
 
     @x.setter
     def x(self, new: int) -> None:
-        self.__pos = (new, self.y)
+        self.__coord = (new, self.y)
 
     @property
     def y(self) -> int:
-        return self.__pos[1]
+        return self.__coord[1]
 
     @y.setter
     def y(self, new: int) -> None:
-        self.__pos = (self.x, new)
+        self.__coord = (self.x, new)
 
     def draw(self, surface: Surface) -> None:
         asset = ASSETS[self.id]
@@ -212,6 +233,7 @@ class Snake:
             Head(init_pos, init_dir),
             Tail((init_pos[0], init_pos[1] + 1), init_dir),
         ]
+        self.score = 0
 
     @property
     def coordinates(self) -> tuple[int, int]:
@@ -234,6 +256,7 @@ class Snake:
         self.__move = True
         head = self.__parts[0]
         self.__parts.insert(1, Part(head.coordinates, head.direction))
+        self.score += 1
 
     def update(self, move: bool) -> None:
         """Move the snake forward by passing the directions of the previous
@@ -275,7 +298,8 @@ class Snake:
 
 
 class UnknownParameter(Exception):
-    pass
+    def __str__(self) -> str:
+        return ""
 
 
 class Map:
@@ -283,6 +307,9 @@ class Map:
         self.__map: list[list[Block]] = []
         self.speed = 0
         self.cherries = False
+        self.next_after = 10
+        self.snake_coord = (10, 10)
+        self.snake_dir = Direction.Up
 
     def load_map(self, path: str):
         try:
@@ -297,8 +324,17 @@ class Map:
                                 self.speed = int(content[2])
                             case "cherries":
                                 self.cherries = bool(content[2])
+                            case "next":
+                                self.next_after = int(content[2])
+                            case "snake_pos":
+                                self.snake_coord = (int(content[2]), int(content[3]))
+                            case "snake_dir":
+                                self.snake_dir = direction_from_str(content[2])
                             case _:
-                                raise UnknownParameter
+                                print(
+                                    f"Error: Unknown Parameter in Level File: {content}"
+                                )
+                                exit(1)
                     else:
                         temp.append([])
                         y = 0
@@ -309,6 +345,7 @@ class Map:
                 self.__map = temp
         except Exception as e:
             print(f"Failed loading map: {path}\nError: {e}")
+            exit(1)
 
     def draw(self, surface: Surface) -> None:
         for row in self.__map:
@@ -336,86 +373,224 @@ class Map:
             return False
 
 
+def start_screen(surface: Surface, clock: pygame.time.Clock) -> bool:
+    """Show an interrupting button that returns False if exited and True if pressed."""
+
+    # load button asset
+    asset = pygame.image.load(START_BUTTON)
+    button = pygame.transform.scale(asset, SCREEN_SIZE)
+
+    # button hitbox
+    width = SCREEN_SIZE[0] / 3
+    height = SCREEN_SIZE[1] / 3
+    x = (SCREEN_SIZE[0] / 2) - (width / 2)
+    y = (SCREEN_SIZE[1] / 2) - (height / 2) + 50
+    button_hitbox = pygame.Rect(x, y, width, height)
+
+    while True:
+        # handle exit
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                return False
+
+        surface.blit(button, (0, 0))
+        mousepos = pygame.mouse.get_pos()
+        if button_hitbox.collidepoint(mousepos):
+            if pygame.mouse.get_pressed()[0]:
+                return True
+
+        pygame.display.flip()
+        clock.tick(FPS)
+
+
+def game_over_screen(surface: Surface, clock: pygame.time.Clock) -> bool:
+    """Game over screen that returns False if exited and True if pressed."""
+
+    # load assets
+    asset = pygame.image.load(GAME_OVER)
+    image = pygame.transform.scale(asset, SCREEN_SIZE)
+
+    while True:
+        # handle exit
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                return False
+
+        surface.blit(image, (0, 0))
+        if pygame.mouse.get_pressed()[0]:
+            return True
+
+        pygame.display.flip()
+        clock.tick(FPS)
+
+
+def level_up_screen(surface: Surface, clock: pygame.time.Clock, level: int) -> bool:
+    try:  # extract name of level
+        name = MAPS[level].split("/")[-1].split(".")[0]
+    except Exception:
+        print(f'Error: Extracting level name failed: "{MAPS[level]}"')
+        exit(1)
+
+    # render text
+    font = pygame.font.Font(None, 64)
+    text = font.render(name, True, (255, 255, 255))
+    rect = text.get_rect()
+    rect.center = (int(SCREEN_SIZE[0] / 2), int(SCREEN_SIZE[1] / 2))
+
+    # for LEVEL_UP_SEC show this screen & then just continue
+    i = 0
+    while i < FPS * LEVEL_UP_SEC:
+        i += 1
+
+        # handle exit
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                return False
+
+        surface.blit(text, rect)
+        if pygame.mouse.get_pressed()[0]:
+            return True
+
+        pygame.display.flip()
+        clock.tick(FPS)
+    return True
+
+
+def you_won_screen(surface: Surface, clock: pygame.time.Clock):
+    font = pygame.font.Font(None, 64)
+    text = font.render("You won I guess -_-", True, (255, 255, 255))
+    rect = text.get_rect()
+    rect.center = (int(SCREEN_SIZE[0] / 2), int(SCREEN_SIZE[1] / 2))
+
+    while True:
+        # handle exit
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                exit()
+
+        surface.blit(text, rect)
+        if pygame.mouse.get_pressed()[0]:
+            exit()
+
+        pygame.display.flip()
+        clock.tick(FPS)
+
+
 if __name__ == "__main__":
     # initiate pygame
     pygame.init()
     clock = pygame.time.Clock()
 
-    # initialize game components
-    world_map = Map()
-    world_map.load_map("maps/Level 2.txt")
-    snake = Snake((1, 10), (Direction.Up, Direction.Down))
-    apple = Apple()
-
     # setup screen
     screen = pygame.display.set_mode(SCREEN_SIZE)
     pygame.display.set_caption(CAPTION)
 
-    # set up game
-    apple.spawn([snake.is_collision, world_map.is_collision])
+    # interrupt with start screen
+    if not start_screen(screen, clock):
+        exit()
 
-    # game loop
-    counter = 0
-    running = True
-    while running:
-        counter += 1
+    # setup game
+    level = 0
+    level_up = False
 
-        # handle input
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
+    # retry after game over
+    retry = True
+    while retry:
+        # check if won
+        if level == len(MAPS):
+            you_won_screen(screen, clock)
 
-            # controls
-            if event.type == pygame.KEYDOWN:
-                print("key pressed")
-                if event.key == pygame.K_UP:
-                    print("up")
-                    snake.set_direction(Direction.Up)
-                if event.key == pygame.K_DOWN:
-                    print("down")
-                    snake.set_direction(Direction.Down)
-                if event.key == pygame.K_LEFT:
-                    print("left")
-                    snake.set_direction(Direction.Left)
-                if event.key == pygame.K_RIGHT:
-                    print("right")
-                    snake.set_direction(Direction.Right)
+        # initialize game components
+        world_map = Map()
+        world_map.load_map(MAPS[level])
+        snake = Snake(
+            world_map.snake_coord,
+            (world_map.snake_dir, counter_direction(world_map.snake_dir)),
+        )
+        apple = Apple()
+        apple.spawn([snake.is_collision, world_map.is_collision])
 
-        if counter >= FPS - world_map.speed:
-            counter = 0
+        if level_up:
+            if not level_up_screen(screen, clock, level):
+                exit()
 
-            # eat apple
-            move = True
-            if snake.position == apple.position:
-                apple.eat()
-                snake.grow()
-                apple.spawn([snake.is_collision, world_map.is_collision])
-                move = False
+        counter = 0
+        level_up = False
 
-            # update
-            snake.update(move)
-            print("loop")
+        # game loop
+        running = True
+        while running:
+            counter += 1
 
-            # collision
-            x, y = snake.position
-            if any(
-                [
-                    snake.is_collision(snake.coordinates),
-                    world_map.is_collision(snake.coordinates),
-                ]
-            ):
-                print("Game Over!")
-                running = False
+            # handle input
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    exit()
 
-            # draw stuff
-            world_map.draw(screen)
-            apple.draw(screen)
-            snake.draw(screen)
+                # controls
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_UP:
+                        print("up")
+                        snake.set_direction(Direction.Up)
+                    if event.key == pygame.K_DOWN:
+                        print("down")
+                        snake.set_direction(Direction.Down)
+                    if event.key == pygame.K_LEFT:
+                        print("left")
+                        snake.set_direction(Direction.Left)
+                    if event.key == pygame.K_RIGHT:
+                        print("right")
+                        snake.set_direction(Direction.Right)
 
-            # update content on screen
-            pygame.display.flip()
+            if counter >= FPS - world_map.speed:
+                counter = 0
 
-        # tick clock
-        clock.tick(FPS)
+                # eat apple
+                move = True
+                if snake.position == apple.position:
+                    apple.eat()
+                    apple.spawn([snake.is_collision, world_map.is_collision])
+                    snake.grow()
+                    move = False
+
+                    # check if level up
+                    if snake.score == world_map.next_after:
+                        running = False
+                        level_up = True
+                        level += 1
+
+                # update
+                snake.update(move)
+                print(f"Score: {snake.score}")
+
+                # collision
+                x, y = snake.position
+                if any(
+                    [
+                        snake.is_collision(snake.coordinates),
+                        world_map.is_collision(snake.coordinates),
+                    ]
+                ):
+                    print("Game Over!")
+                    running = False
+
+                # draw stuff
+                world_map.draw(screen)
+                apple.draw(screen)
+                snake.draw(screen)
+
+                # update content on screen
+                pygame.display.flip()
+
+            # tick clock
+            clock.tick(FPS)
+
+        if not level_up:
+            retry = game_over_screen(screen, clock)
+            level = 0
 
     pygame.quit()
+
+
+# TODO: cherries -_-
+# TODO: sound for collect, level up & game over
