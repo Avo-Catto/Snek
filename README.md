@@ -37,3 +37,5 @@ Apple Bite Sound Effect by <a href="https://pixabay.com/de/users/bunny_cube98-49
 Level Up Sound Effect by <a href="https://pixabay.com/de/users/delon_boomkin-32986949/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=438908">Delon_Boomkin</a> from <a href="https://pixabay.com//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=438908">Pixabay</a>
 
 Background Music Sound Effect by <a href="https://pixabay.com/de/users/freesound_community-46691455/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=68698">freesound_community</a> from <a href="https://pixabay.com//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=68698">Pixabay</a>
+
+Cherry Bite Sound Sound Effect by <a href="https://pixabay.com/de/users/freesound_community-46691455/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=83240">freesound_community</a> from <a href="https://pixabay.com//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=83240">Pixabay</a>

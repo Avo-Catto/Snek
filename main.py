@@ -38,6 +38,7 @@ pygame.mixer.music.load("sounds/8bit.mp3")
 
 SOUNDS = {
     "eat": pygame.mixer.Sound("sounds/eat.mp3"),
+    "eat2": pygame.mixer.Sound("sounds/eat2.mp3"),
     "game_over": pygame.mixer.Sound("sounds/game_over.mp3"),
     "level_up": pygame.mixer.Sound("sounds/level_up.mp3"),
 }
@@ -124,14 +125,14 @@ class Block:
 class Apple(Block):
     def __init__(
         self,
-        pos: tuple[int, int] = (-FIELD_SIZE[0], -FIELD_SIZE[1]),
+        coords: tuple[int, int] = (-1, -1),
         id: int = 2,
     ) -> None:
-        super().__init__(id, pos)
+        super().__init__(id, coords)
 
     def eat(self) -> None:
         """Hide apple."""
-        self.coordinates = (-FIELD_SIZE[0], -FIELD_SIZE[1])
+        self.coordinates = (-1, -1)
         pygame.mixer.Sound.play(SOUNDS["eat"])
 
     def spawn(self, obstacles: list[Callable[[tuple[int, int]], bool]]) -> None:
@@ -141,6 +142,44 @@ class Apple(Block):
             self.spawn(obstacles)
         else:
             self.coordinates = coords
+
+    def is_collision(self, coordinates: tuple[int, int]) -> bool:
+        if self.coordinates == coordinates:
+            return True
+        else:
+            return False
+
+
+class Cherry(Apple):
+    def __init__(self, time: int, pos=(-1, -1), id=3) -> None:
+        super().__init__(pos, id)
+        self.life_time = 0
+        self.out_time = 0
+        self.cherry_time = time
+
+    def eat(self) -> None:
+        self.coordinates = (-1, -1)
+        print("cherry eaten!\n\n")
+        pygame.mixer.Sound.play(SOUNDS["eat2"])
+        self.life_time = 0
+
+    def spawn(self, obstacles):
+        self.life_time = FPS * self.cherry_time
+        return super().spawn(obstacles)
+
+    def update(
+        self,
+        out_range: tuple[int, int],
+        obstacles: list[Callable[[tuple[int, int]], bool]],
+    ) -> None:
+        if self.life_time == 0:
+            self.coordinates = (-1, -1)
+            self.out_time = FPS * randint(*out_range)
+        elif self.out_time >= 0:
+            self.out_time -= 1
+        elif self.life_time < 0:
+            self.spawn(obstacles)
+        self.life_time -= 1
 
 
 class DirectionBlock(Block):
@@ -324,6 +363,8 @@ class Map:
         self.next_after = 10
         self.snake_coord = (10, 10)
         self.snake_dir = Direction.Up
+        self.cherry_time = 4
+        self.cherry_out_time = (5, 10)
 
     def load_map(self, path: str):
         try:
@@ -344,6 +385,13 @@ class Map:
                                 self.snake_coord = (int(content[2]), int(content[3]))
                             case "snake_dir":
                                 self.snake_dir = direction_from_str(content[2])
+                            case "cherry_time":
+                                self.cherry_time = int(content[2])
+                            case "cherry_out_time":
+                                self.cherry_out_time = (
+                                    int(content[2]),
+                                    int(content[3]),
+                                )
                             case _:
                                 print(
                                     f"Error: Unknown Parameter in Level File: {content}"
@@ -506,6 +554,7 @@ if __name__ == "__main__":
     # setup game
     level = 0
     level_up = False
+    score_font = pygame.font.Font(None, 22)
 
     # retry after game over
     retry = True
@@ -523,6 +572,12 @@ if __name__ == "__main__":
         )
         apple = Apple()
         apple.spawn([snake.is_collision, world_map.is_collision])
+        cherry = Cherry(world_map.cherry_time)
+        print(world_map.cherries)
+        if world_map.cherries:
+            cherry.spawn(
+                [snake.is_collision, world_map.is_collision, apple.is_collision]
+            )
 
         if level_up:
             if not level_up_screen(screen, clock, level):
@@ -561,16 +616,29 @@ if __name__ == "__main__":
                 move = True
                 if snake.position == apple.position:
                     apple.eat()
-                    apple.spawn([snake.is_collision, world_map.is_collision])
+                    apple.spawn(
+                        [
+                            snake.is_collision,
+                            world_map.is_collision,
+                            cherry.is_collision,
+                        ]
+                    )
                     snake.grow()
                     move = False
 
-                    # check if level up
-                    if snake.score == world_map.next_after:
-                        pygame.mixer.Sound.play(SOUNDS["level_up"])
-                        running = False
-                        level_up = True
-                        level += 1
+                # eat cherry
+                if snake.position == cherry.position:
+                    cherry.eat()
+                    snake.grow()
+                    snake.score += 1
+                    move = False
+
+                # check if level up
+                if snake.score >= world_map.next_after:
+                    pygame.mixer.Sound.play(SOUNDS["level_up"])
+                    running = False
+                    level_up = True
+                    level += 1
 
                 # update
                 snake.update(move)
@@ -589,10 +657,24 @@ if __name__ == "__main__":
                 # draw stuff
                 world_map.draw(screen)
                 apple.draw(screen)
+                cherry.draw(screen)
                 snake.draw(screen)
+                text = score_font.render(
+                    f"Score: {snake.score} / {world_map.next_after}",
+                    True,
+                    (255, 255, 255),
+                )
+                screen.blit(text, (2, 2))
 
                 # update content on screen
                 pygame.display.flip()
+
+            # update cherry
+            if world_map.cherries:
+                cherry.update(
+                    world_map.cherry_out_time,
+                    [snake.is_collision, world_map.is_collision, apple.is_collision],
+                )
 
             # tick clock
             clock.tick(FPS)
@@ -603,6 +685,3 @@ if __name__ == "__main__":
             level = 0
 
     pygame.quit()
-
-
-# TODO: cherries -_-
