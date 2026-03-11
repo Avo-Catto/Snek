@@ -129,16 +129,18 @@ class Apple(Block):
         id: int = 2,
     ) -> None:
         super().__init__(id, coords)
+        self.previous_coords = coords
 
     def eat(self) -> None:
         """Hide apple."""
+        self.previous_coords = self.coordinates
         self.coordinates = (-1, -1)
         pygame.mixer.Sound.play(SOUNDS["eat"])
 
     def spawn(self, obstacles: list[Callable[[tuple[int, int]], bool]]) -> None:
         """Spawn an apple at a random empty space on the map."""
         coords = (randint(0, BOARD_SIZE[0]), randint(0, BOARD_SIZE[1]))
-        if any([f(coords) for f in obstacles]):
+        if any([f(coords) for f in obstacles]) and coords != self.previous_coords:
             self.spawn(obstacles)
         else:
             self.coordinates = coords
@@ -538,7 +540,7 @@ def you_won_screen(surface: Surface, clock: pygame.time.Clock):
         clock.tick(FPS)
 
 
-if __name__ == "__main__":
+def main():
     # initiate pygame
     pygame.init()
     clock = pygame.time.Clock()
@@ -685,3 +687,7 @@ if __name__ == "__main__":
             level = 0
 
     pygame.quit()
+
+
+if __name__ == "__main__":
+    main()

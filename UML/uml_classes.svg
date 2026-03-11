@@ -1,0 +1,179 @@
+<svg width="1727pt" height="558pt" viewBox="0.00 0.00 1727.00 558.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 554.2)">
+<title>classes</title>
+<polygon fill="white" stroke="none" points="-4,4 -4,-554.2 1723.3,-554.2 1723.3,4 -4,4"/>
+<!-- main.Apple -->
+<g id="node1" class="node">
+<title>main.Apple</title>
+<polygon fill="none" stroke="black" points="479.81,-246.3 479.81,-371.1 834.83,-371.1 834.83,-246.3 479.81,-246.3"/>
+<text xml:space="preserve" text-anchor="start" x="640.21" y="-354.5" font-family="Times,serif" font-size="14.00">Apple</text>
+<polyline fill="none" stroke="black" points="479.81,-346.3 834.83,-346.3"/>
+<text xml:space="preserve" text-anchor="start" x="568.67" y="-329.7" font-family="Times,serif" font-size="14.00">coordinates : tuple</text>
+<text xml:space="preserve" text-anchor="start" x="568.67" y="-312.9" font-family="Times,serif" font-size="14.00">previous_coords : tuple[int, int]</text>
+<polyline fill="none" stroke="black" points="479.81,-304.7 834.83,-304.7"/>
+<text xml:space="preserve" text-anchor="start" x="487.81" y="-288.1" font-family="Times,serif" font-size="14.00">eat(): None</text>
+<text xml:space="preserve" text-anchor="start" x="487.81" y="-271.3" font-family="Times,serif" font-size="14.00">is_collision(coordinates: tuple[int, int]): bool</text>
+<text xml:space="preserve" text-anchor="start" x="487.81" y="-254.5" font-family="Times,serif" font-size="14.00">spawn(obstacles: list[Callable[[tuple[int, int]], bool]]): None</text>
+</g>
+<!-- main.Block -->
+<g id="node2" class="node">
+<title>main.Block</title>
+<polygon fill="none" stroke="black" points="360.53,-408.1 360.53,-549.7 542.11,-549.7 542.11,-408.1 360.53,-408.1"/>
+<text xml:space="preserve" text-anchor="start" x="434.6" y="-533.1" font-family="Times,serif" font-size="14.00">Block</text>
+<polyline fill="none" stroke="black" points="360.53,-524.9 542.11,-524.9"/>
+<text xml:space="preserve" text-anchor="start" x="376.67" y="-508.3" font-family="Times,serif" font-size="14.00">coordinates : tuple[int, int]</text>
+<text xml:space="preserve" text-anchor="start" x="376.67" y="-491.5" font-family="Times,serif" font-size="14.00">id : int</text>
+<text xml:space="preserve" text-anchor="start" x="376.67" y="-474.7" font-family="Times,serif" font-size="14.00">position : tuple[int, int]</text>
+<text xml:space="preserve" text-anchor="start" x="376.67" y="-457.9" font-family="Times,serif" font-size="14.00">x : int</text>
+<text xml:space="preserve" text-anchor="start" x="376.67" y="-441.1" font-family="Times,serif" font-size="14.00">y : int</text>
+<polyline fill="none" stroke="black" points="360.53,-432.9 542.11,-432.9"/>
+<text xml:space="preserve" text-anchor="start" x="368.53" y="-416.3" font-family="Times,serif" font-size="14.00">draw(surface: Surface): None</text>
+</g>
+<!-- main.Apple&#45;&gt;main.Block -->
+<g id="edge1" class="edge">
+<title>main.Apple-&gt;main.Block</title>
+<path fill="none" stroke="black" d="M581.78,-371.38C570.14,-380.88 557.99,-390.8 546,-400.6"/>
+<polygon fill="none" stroke="black" points="544,-397.71 538.47,-406.74 548.43,-403.13 544,-397.71"/>
+</g>
+<!-- main.Cherry -->
+<g id="node3" class="node">
+<title>main.Cherry</title>
+<polygon fill="none" stroke="black" points="458.92,-25.7 458.92,-184.1 959.73,-184.1 959.73,-25.7 458.92,-25.7"/>
+<text xml:space="preserve" text-anchor="start" x="689.88" y="-167.5" font-family="Times,serif" font-size="14.00">Cherry</text>
+<polyline fill="none" stroke="black" points="458.92,-159.3 959.73,-159.3"/>
+<text xml:space="preserve" text-anchor="start" x="657.61" y="-142.7" font-family="Times,serif" font-size="14.00">cherry_time : int</text>
+<text xml:space="preserve" text-anchor="start" x="657.61" y="-125.9" font-family="Times,serif" font-size="14.00">coordinates : tuple</text>
+<text xml:space="preserve" text-anchor="start" x="657.61" y="-109.1" font-family="Times,serif" font-size="14.00">life_time : int</text>
+<text xml:space="preserve" text-anchor="start" x="657.61" y="-92.3" font-family="Times,serif" font-size="14.00">out_time : int</text>
+<polyline fill="none" stroke="black" points="458.92,-84.1 959.73,-84.1"/>
+<text xml:space="preserve" text-anchor="start" x="466.92" y="-67.5" font-family="Times,serif" font-size="14.00">eat(): None</text>
+<text xml:space="preserve" text-anchor="start" x="466.92" y="-50.7" font-family="Times,serif" font-size="14.00">spawn(obstacles)</text>
+<text xml:space="preserve" text-anchor="start" x="466.92" y="-33.9" font-family="Times,serif" font-size="14.00">update(out_range: tuple[int, int], obstacles: list[Callable[[tuple[int, int]], bool]]): None</text>
+</g>
+<!-- main.Cherry&#45;&gt;main.Apple -->
+<g id="edge2" class="edge">
+<title>main.Cherry-&gt;main.Apple</title>
+<path fill="none" stroke="black" d="M689.07,-184.5C684.8,-201.04 680.32,-218.43 676.12,-234.76"/>
+<polygon fill="none" stroke="black" points="672.74,-233.85 673.63,-244.4 679.52,-235.59 672.74,-233.85"/>
+</g>
+<!-- main.Direction -->
+<g id="node4" class="node">
+<title>main.Direction</title>
+<polygon fill="none" stroke="black" points="977.89,-67.7 977.89,-142.1 1046.76,-142.1 1046.76,-67.7 977.89,-67.7"/>
+<text xml:space="preserve" text-anchor="start" x="985.89" y="-125.5" font-family="Times,serif" font-size="14.00">Direction</text>
+<polyline fill="none" stroke="black" points="977.89,-117.3 1046.76,-117.3"/>
+<text xml:space="preserve" text-anchor="start" x="997.16" y="-100.7" font-family="Times,serif" font-size="14.00">name</text>
+<polyline fill="none" stroke="black" points="977.89,-92.5 1046.76,-92.5"/>
+<text xml:space="preserve" text-anchor="start" x="1010.57" y="-75.9" font-family="Times,serif" font-size="14.00"> </text>
+</g>
+<!-- main.DirectionBlock -->
+<g id="node5" class="node">
+<title>main.DirectionBlock</title>
+<polygon fill="none" stroke="black" points="183.97,-271.5 183.97,-345.9 410.67,-345.9 410.67,-271.5 183.97,-271.5"/>
+<text xml:space="preserve" text-anchor="start" x="254.17" y="-329.3" font-family="Times,serif" font-size="14.00">DirectionBlock</text>
+<polyline fill="none" stroke="black" points="183.97,-321.1 410.67,-321.1"/>
+<text xml:space="preserve" text-anchor="start" x="191.97" y="-304.5" font-family="Times,serif" font-size="14.00">direction : tuple[Direction, Direction]</text>
+<polyline fill="none" stroke="black" points="183.97,-296.3 410.67,-296.3"/>
+<text xml:space="preserve" text-anchor="start" x="214.53" y="-279.7" font-family="Times,serif" font-size="14.00">draw(surface: Surface): None</text>
+</g>
+<!-- main.DirectionBlock&#45;&gt;main.Block -->
+<g id="edge3" class="edge">
+<title>main.DirectionBlock-&gt;main.Block</title>
+<path fill="none" stroke="black" d="M330.74,-346.2C345.15,-361.94 362.59,-380.99 379.69,-399.66"/>
+<polygon fill="none" stroke="black" points="376.88,-401.78 386.22,-406.79 382.05,-397.05 376.88,-401.78"/>
+</g>
+<!-- main.Head -->
+<g id="node6" class="node">
+<title>main.Head</title>
+<polygon fill="none" stroke="black" points="0,-50.9 0,-158.9 104.64,-158.9 104.64,-50.9 0,-50.9"/>
+<text xml:space="preserve" text-anchor="start" x="37.55" y="-142.3" font-family="Times,serif" font-size="14.00">Head</text>
+<polyline fill="none" stroke="black" points="0,-134.1 104.64,-134.1"/>
+<text xml:space="preserve" text-anchor="start" x="8" y="-117.5" font-family="Times,serif" font-size="14.00">direction : tuple</text>
+<text xml:space="preserve" text-anchor="start" x="8" y="-100.7" font-family="Times,serif" font-size="14.00">x</text>
+<text xml:space="preserve" text-anchor="start" x="8" y="-83.9" font-family="Times,serif" font-size="14.00">y</text>
+<polyline fill="none" stroke="black" points="0,-75.7 104.64,-75.7"/>
+<text xml:space="preserve" text-anchor="start" x="50.57" y="-59.1" font-family="Times,serif" font-size="14.00"> </text>
+</g>
+<!-- main.Head&#45;&gt;main.DirectionBlock -->
+<g id="edge4" class="edge">
+<title>main.Head-&gt;main.DirectionBlock</title>
+<path fill="none" stroke="black" d="M76.29,-159.3C85.99,-176.87 98.45,-195.54 113.32,-209.8 136.8,-232.32 166.48,-251.09 195.11,-265.98"/>
+<polygon fill="none" stroke="black" points="193.33,-269 203.83,-270.39 196.49,-262.75 193.33,-269"/>
+</g>
+<!-- main.Map -->
+<g id="node7" class="node">
+<title>main.Map</title>
+<polygon fill="none" stroke="black" points="1064.88,-0.5 1064.88,-209.3 1287.76,-209.3 1287.76,-0.5 1064.88,-0.5"/>
+<text xml:space="preserve" text-anchor="start" x="1163.49" y="-192.7" font-family="Times,serif" font-size="14.00">Map</text>
+<polyline fill="none" stroke="black" points="1064.88,-184.5 1287.76,-184.5"/>
+<text xml:space="preserve" text-anchor="start" x="1080.28" y="-167.9" font-family="Times,serif" font-size="14.00">cherries : bool</text>
+<text xml:space="preserve" text-anchor="start" x="1080.28" y="-151.1" font-family="Times,serif" font-size="14.00">cherry_out_time : tuple</text>
+<text xml:space="preserve" text-anchor="start" x="1080.28" y="-134.3" font-family="Times,serif" font-size="14.00">cherry_time : int</text>
+<text xml:space="preserve" text-anchor="start" x="1080.28" y="-117.5" font-family="Times,serif" font-size="14.00">next_after : int</text>
+<text xml:space="preserve" text-anchor="start" x="1080.28" y="-100.7" font-family="Times,serif" font-size="14.00">snake_coord : tuple</text>
+<text xml:space="preserve" text-anchor="start" x="1080.28" y="-83.9" font-family="Times,serif" font-size="14.00">snake_dir : Down, Left, Right, Up</text>
+<text xml:space="preserve" text-anchor="start" x="1080.28" y="-67.1" font-family="Times,serif" font-size="14.00">speed : int</text>
+<polyline fill="none" stroke="black" points="1064.88,-58.9 1287.76,-58.9"/>
+<text xml:space="preserve" text-anchor="start" x="1072.88" y="-42.3" font-family="Times,serif" font-size="14.00">draw(surface: Surface): None</text>
+<text xml:space="preserve" text-anchor="start" x="1072.88" y="-25.5" font-family="Times,serif" font-size="14.00">is_collision(pos: tuple[int, int]): bool</text>
+<text xml:space="preserve" text-anchor="start" x="1072.88" y="-8.7" font-family="Times,serif" font-size="14.00">load_map(path: str)</text>
+</g>
+<!-- main.Part -->
+<g id="node8" class="node">
+<title>main.Part</title>
+<polygon fill="none" stroke="black" points="122.53,-67.7 122.53,-142.1 304.11,-142.1 304.11,-67.7 122.53,-67.7"/>
+<text xml:space="preserve" text-anchor="start" x="202.04" y="-125.5" font-family="Times,serif" font-size="14.00">Part</text>
+<polyline fill="none" stroke="black" points="122.53,-117.3 304.11,-117.3"/>
+<polyline fill="none" stroke="black" points="122.53,-92.5 304.11,-92.5"/>
+<text xml:space="preserve" text-anchor="start" x="130.53" y="-75.9" font-family="Times,serif" font-size="14.00">draw(surface: Surface): None</text>
+</g>
+<!-- main.Part&#45;&gt;main.DirectionBlock -->
+<g id="edge5" class="edge">
+<title>main.Part-&gt;main.DirectionBlock</title>
+<path fill="none" stroke="black" d="M228.53,-142.44C242.35,-175.63 262.79,-224.75 277.81,-260.82"/>
+<polygon fill="none" stroke="black" points="274.42,-261.8 281.5,-269.69 280.89,-259.11 274.42,-261.8"/>
+</g>
+<!-- main.Snake -->
+<g id="node9" class="node">
+<title>main.Snake</title>
+<polygon fill="none" stroke="black" points="1305.34,-17.3 1305.34,-192.5 1573.3,-192.5 1573.3,-17.3 1305.34,-17.3"/>
+<text xml:space="preserve" text-anchor="start" x="1422.21" y="-175.9" font-family="Times,serif" font-size="14.00">Snake</text>
+<polyline fill="none" stroke="black" points="1305.34,-167.7 1573.3,-167.7"/>
+<text xml:space="preserve" text-anchor="start" x="1364.67" y="-151.1" font-family="Times,serif" font-size="14.00">coordinates : tuple[int, int]</text>
+<text xml:space="preserve" text-anchor="start" x="1364.67" y="-134.3" font-family="Times,serif" font-size="14.00">position : tuple[int, int]</text>
+<text xml:space="preserve" text-anchor="start" x="1364.67" y="-117.5" font-family="Times,serif" font-size="14.00">score : int</text>
+<polyline fill="none" stroke="black" points="1305.34,-109.3 1573.3,-109.3"/>
+<text xml:space="preserve" text-anchor="start" x="1313.34" y="-92.7" font-family="Times,serif" font-size="14.00">draw(surface: Surface): None</text>
+<text xml:space="preserve" text-anchor="start" x="1313.34" y="-75.9" font-family="Times,serif" font-size="14.00">grow(): None</text>
+<text xml:space="preserve" text-anchor="start" x="1313.34" y="-59.1" font-family="Times,serif" font-size="14.00">is_collision(coordinates: tuple[int, int]): bool</text>
+<text xml:space="preserve" text-anchor="start" x="1313.34" y="-42.3" font-family="Times,serif" font-size="14.00">set_direction(dir: Direction): None</text>
+<text xml:space="preserve" text-anchor="start" x="1313.34" y="-25.5" font-family="Times,serif" font-size="14.00">update(move: bool): None</text>
+</g>
+<!-- main.Tail -->
+<g id="node10" class="node">
+<title>main.Tail</title>
+<polygon fill="none" stroke="black" points="321.61,-59.3 321.61,-150.5 441.03,-150.5 441.03,-59.3 321.61,-59.3"/>
+<text xml:space="preserve" text-anchor="start" x="370.05" y="-133.9" font-family="Times,serif" font-size="14.00">Tail</text>
+<polyline fill="none" stroke="black" points="321.61,-125.7 441.03,-125.7"/>
+<text xml:space="preserve" text-anchor="start" x="329.61" y="-109.1" font-family="Times,serif" font-size="14.00">coordinates : tuple</text>
+<text xml:space="preserve" text-anchor="start" x="329.61" y="-92.3" font-family="Times,serif" font-size="14.00">direction : tuple</text>
+<polyline fill="none" stroke="black" points="321.61,-84.1 441.03,-84.1"/>
+<text xml:space="preserve" text-anchor="start" x="379.57" y="-67.5" font-family="Times,serif" font-size="14.00"> </text>
+</g>
+<!-- main.Tail&#45;&gt;main.DirectionBlock -->
+<g id="edge6" class="edge">
+<title>main.Tail-&gt;main.DirectionBlock</title>
+<path fill="none" stroke="black" d="M362.57,-150.94C348.96,-183.64 330.59,-227.78 316.81,-260.88"/>
+<polygon fill="none" stroke="black" points="313.7,-259.24 313.09,-269.82 320.16,-261.93 313.7,-259.24"/>
+</g>
+<!-- main.UnknownParameter -->
+<g id="node11" class="node">
+<title>main.UnknownParameter</title>
+<polygon fill="none" stroke="black" points="1591.34,-67.7 1591.34,-142.1 1719.3,-142.1 1719.3,-67.7 1591.34,-67.7"/>
+<text xml:space="preserve" text-anchor="start" x="1599.34" y="-125.5" font-family="Times,serif" font-size="14.00" fill="red">UnknownParameter</text>
+<polyline fill="none" stroke="black" points="1591.34,-117.3 1719.3,-117.3"/>
+<polyline fill="none" stroke="black" points="1591.34,-92.5 1719.3,-92.5"/>
+<text xml:space="preserve" text-anchor="start" x="1653.57" y="-75.9" font-family="Times,serif" font-size="14.00" fill="red"> </text>
+</g>
+</g>
+</svg>
