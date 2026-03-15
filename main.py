@@ -386,7 +386,7 @@ class Map:
         self.snake_coord = (10, 10)
         self.snake_dir = Direction.Up
         self.cherries = True
-        self.cherry_time = 10
+        self.cherry_time = 6
         self.cherry_out_time = (5, 10)
 
     def load_map(self, path: str):

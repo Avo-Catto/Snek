@@ -104,7 +104,7 @@ Alle Parameter mit Standardwerten:
 > snake_pos 10 10       # x = 10; y = 10
 > snake_dir u           # u = up; d = down; l = left; r = right
 > cherries 1            # 1 = aktiviert; 0 = deaktiviert
-> cherry_time 10        # 10 Sekunden
+> cherry_time 6         # 6 Sekunden
 > cherry_out_time 5 10  # zwischen 5 bis 10 Sekunden
 ```
 
